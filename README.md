@@ -257,31 +257,9 @@ Relay operating mode
 
 Override status
 
-📁 Project Structure
-HomeHelperDevice_STM32
-│
-├── Core
-│   ├── Inc
-│   │   ├── config.h
-│   │   ├── delay_us.h
-│   │   ├── dht11.h
-│   │   ├── lcd.h
-│   │   ├── uart_comm.h
-│   │   └── adc_sensor.h
-│   │
-│   └── Src
-│       ├── main.c
-│       ├── delay_us.c
-│       ├── dht11.c
-│       ├── lcd.c
-│       ├── uart_comm.c
-│       └── adc_sensor.c
-│
-├── Drivers
-├── docs
-├── Makefile
-├── README.md
-└── STM32F103C8TX_FLASH.ld
+📁 Block diagram
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/37546b86-327b-4040-bdb8-206f1a5717a0" />
+
 🚀 Building the Project
 Requirements
 ARM GNU Embedded Toolchain
