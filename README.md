@@ -6,7 +6,7 @@ Powered by the STM32F103C8T6 (Blue Pill) using ARM Cortex-M3, STM32 HAL, and Emb
 Designed for real-time environmental monitoring, appliance automation, and safety protection without requiring cloud connectivity. 
 
 
-📖 Overview
+                                                                       📖 Overview
 Home Helper Device is an intelligent embedded system that continuously monitors temperature, humidity, gas leakage, ambient light, and human presence to automatically control household appliances and trigger safety responses when hazardous conditions are detected.
 
 All processing occurs locally on the STM32 microcontroller, ensuring:
@@ -24,7 +24,7 @@ Low power consumption
 The system integrates multiple sensors and actuators into a single platform capable of operating autonomously while also supporting Bluetooth-based remote control. 
 
 
-✨ Key Features
+                                                                            ✨ Key Features
 Environmental Monitoring
 Real-time temperature and humidity measurement using DHT11
 
@@ -72,7 +72,7 @@ Lightweight memory footprint
 
 Fully offline operation
 
-📊 System Specifications
+                                                                          📊 System Specifications
 Parameter	Value
 MCU	STM32F103C8T6
 Core	ARM Cortex-M3
@@ -84,7 +84,8 @@ Framework	STM32 HAL
 ADC Resolution	12-bit
 UART Baud Rate	115200
 Fan PWM Frequency	1 kHz
-🏗 System Architecture
+
+                                                                      🏗 System Architecture
 The firmware operates as an event-driven state machine with four operating modes:
 
 NORMAL State
@@ -258,7 +259,7 @@ Relay operating mode
 
 Override status
 
-📁 Block diagram
+                                                                      📁 Block diagram
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/37546b86-327b-4040-bdb8-206f1a5717a0" />
 
 🚀 Building the Project
@@ -331,7 +332,7 @@ Baud rate must be 115200
 
 Configure terminal as 8N1
 
-📈 Resource Utilization
+                                                                     📈 Resource Utilization
 Resource	Used	Available
 Flash	~18 KB	64 KB
 RAM	~1.3 KB	20 KB
@@ -339,7 +340,7 @@ GPIO	20	37
 UART	USART1	USART1/2/3
 ADC Channels	2	10
 Timers	TIM3	TIM1–TIM4
-🔮 Future Enhancements
+                                                                   🔮 Future Enhancements
 Wi-Fi Connectivity (ESP8266/ESP32)
 
 Mobile Application
