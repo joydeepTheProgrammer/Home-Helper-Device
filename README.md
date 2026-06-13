@@ -1,5 +1,6 @@
 
-🏠 Home Helper Device — STM32 Edition
+                                                               🏠 Home Helper Device — STM32 Edition
+
 A Fully Autonomous Smart Home Automation & Safety System
 Powered by the STM32F103C8T6 (Blue Pill) using ARM Cortex-M3, STM32 HAL, and Embedded C11.
 Designed for real-time environmental monitoring, appliance automation, and safety protection without requiring cloud connectivity. 
