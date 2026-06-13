@@ -197,7 +197,7 @@ The relay is automatically disabled when:
 Gas Alarm Active
 OR
 Temperature ≥ 40°C
-📱 Bluetooth Commands
+                                                                       📱 Bluetooth Commands
 Command	Action
 R	Relay ON
 r	Relay OFF
