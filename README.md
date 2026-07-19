@@ -238,8 +238,9 @@ Activated manually through:
 ```text
 Duty = (Temperature - 30) × 999 / 5
 
+```
 ---
-s
+
 # License
 
 Unless otherwise specified, all content in this repository—including, but not
