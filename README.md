@@ -82,7 +82,7 @@ Sensors ──► STM32F103C8T6 ──► Actuators
 │                   │                      └──────────────────┘                                      │
 │                   │                                                                                │
 │                   └────── SELECT btn / BT cmd ───────────────►┌────────────────┐                   │
-│                                                               │   OVERRIDE     │                   │
+│                                                               │   OVERRIDE     │                   │ 
 │                                                               │  (no alarms)   │                   │
 │                                                               └────────────────┘                   │
 │                                                                                                    │
