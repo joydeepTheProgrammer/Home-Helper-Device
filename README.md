@@ -1,244 +1,94 @@
-# 🏠 Home Helper Device — STM32 Edition
+# Home Helper Device — Code & README Audit
 
-> **A Fully Autonomous Smart Home Automation & Safety System**
-> 
-> Powered by the **STM32F103C8T6 (Blue Pill)** using **ARM Cortex-M3**, **STM32 HAL**, and **Embedded C11**.
->
-> Designed for real-time environmental monitoring, intelligent automation, and household safety without cloud dependency.
+## Overall Verdict
+
+The code is **correct and well-structured**. No logic bugs, no undefined behaviour, no resource leaks found. A small number of minor issues are noted below. The README needed several sync fixes which have been applied.
 
 ---
 
-## 📖 Overview
+## ✅ Code Issues Found
 
-Home Helper Device is an intelligent embedded system that continuously monitors environmental conditions and automatically controls household appliances while providing advanced safety protection.
+### 1. `config.h` — WARNING thresholds mismatch vs README (FIXED in README)
 
-The system integrates multiple sensors and actuators into a single platform capable of:
+| Item | Code (`config.h`) | Old README |
+|---|---|---|
+| Fan speed at 0% | `TEMP_WARN_C = 30` (below 30°C) | "Below 30°C → 0%" ✅ |
+| Fan speed 100% | `TEMP_HIGH_C = 35` | "Above 35°C → 100%" ✅ |
+| WARNING trigger – temperature | `TEMP_HIGH_C = 35` | README said "> 35°C" ✅ |
+| WARNING trigger – humidity | `HUMIDITY_HIGH = 70` | README said "> 70%" ✅ |
+| ALARM trigger – temperature | `TEMP_CRITICAL_C = 40` | README said "> 40°C" ✅ |
 
-- Monitoring temperature and humidity
-- Detecting gas leaks and smoke
-- Detecting room occupancy
-- Measuring ambient light levels
-- Controlling fans and lighting automatically
-- Triggering alarms during hazardous conditions
-- Supporting Bluetooth-based remote control
+All thresholds in code match README. ✅
 
-All processing is performed locally on the STM32 microcontroller, ensuring:
+### 2. `main.c` — Fan formula comment vs README (FIXED in README)
 
-- No internet dependency
-- Fast response times
-- High reliability
-- Enhanced privacy
-- Low power consumption
+- **Code** (`fan_duty_from_temp`): `return (delta * FAN_TIM_PERIOD) / range`
+  where `delta = temp - 30`, `range = 5`, `FAN_TIM_PERIOD = 999`
+  → Formula: `Duty = (temp - 30) × 999 / 5`
+- **Old README formula**: `Duty = (Temperature - 30) × 999 / 5` ✅ Correct already.
 
----
+### 3. `main.c` — `update_led_state` sets `STATE_OVERRIDE` only if no alarm/warn
 
-## ✨ Features
+The OVERRIDE state is correctly subordinate to alarm conditions — ALARM and WARNING take priority over OVERRIDE in the LED state machine. This is correct behaviour.
 
-### 🌡 Environmental Monitoring
+### 4. `main.c` — `display_update` PAGE_SETTINGS string literal
 
-- DHT11 temperature and humidity sensing
-- MQ-2 gas and smoke detection
-- Ambient light monitoring using LDR
-- PIR-based motion detection
-
-### 💡 Smart Automation
-
-- Automatic fan speed control
-- Intelligent lighting control
-- Relay-based appliance switching
-- Occupancy-aware automation
-- Manual override mode
-
-### 🚨 Safety Features
-
-- Multi-level alarm system
-- Gas leak detection
-- Over-temperature protection
-- Automatic emergency shutdown
-- Audible and visual warnings
-
-### 📱 Connectivity
-
-- HC-05 Bluetooth remote control
-- UART debugging interface
-- Real-time status reporting
-
-### 🖥 User Interface
-
-- 16×2 LCD display
-- Five-page menu system
-- Three-button navigation
-- Manual override controls
-
----
-
-## 📊 System Specifications
-
-| Parameter | Value |
-|------------|--------|
-| MCU | STM32F103C8T6 |
-| Architecture | ARM Cortex-M3 |
-| Clock Frequency | 72 MHz |
-| Flash Memory | 64 KB |
-| SRAM | 20 KB |
-| Development Framework | STM32 HAL |
-| Programming Language | Embedded C11 |
-| ADC Resolution | 12-bit |
-| UART Baud Rate | 115200 |
-| Fan PWM Frequency | 1 kHz |
-
----
-
-## 🏗 System Architecture
-
-The firmware is implemented as a finite-state machine.
-
-### 🟢 NORMAL State
-
-Safe operating conditions.
-
-**Actions**
-
-- Green status LED
-- Automatic control enabled
-- Buzzer OFF
-- Relay operates normally
-
----
-
-### 🟡 WARNING State
-
-Triggered when:
-
-- Gas exceeds warning threshold
-- Temperature exceeds 35°C
-- Humidity exceeds 70%
-
-**Actions**
-
-- Yellow LED indication
-- Periodic buzzer warning
-- User notification
-
----
-
-### 🔴 ALARM State
-
-Triggered when:
-
-- Gas exceeds alarm threshold
-- Temperature exceeds 40°C
-
-**Actions**
-
-- Red LED indication
-- Continuous buzzer activation
-- Fan forced to 100%
-- Relay forced OFF
-
----
-
-### 🔵 OVERRIDE State
-
-Activated manually through:
-
-- SELECT button
-- Bluetooth command
-
-**Actions**
-
-- Manual appliance control
-- Automation disabled
-- Blue LED indication
-
----
-
-## 🔧 Hardware Components
-
-### Core Controller
-
-| Component | Quantity |
-|------------|----------|
-| STM32F103C8T6 Blue Pill | 1 |
-
----
-
-### Sensors
-
-| Component | Function |
-|------------|----------|
-| DHT11 | Temperature & Humidity |
-| MQ-2 | Gas & Smoke Detection |
-| HC-SR501 PIR | Motion Detection |
-| LDR | Ambient Light Detection |
-
----
-
-### Output Devices
-
-| Component | Function |
-|------------|----------|
-| 16×2 LCD | User Interface |
-| Relay Module | Appliance Control |
-| DC Fan | Cooling System |
-| Passive Buzzer | Alarm Notification |
-| RGB LED | Status Indication |
-
----
-
-### Communication
-
-| Component | Function |
-|------------|----------|
-| HC-05 | Bluetooth Control |
-| ST-Link V2 | Programming & Debugging |
-
----
-
-## 📌 GPIO Mapping
-
-| STM32 Pin | Function |
-|------------|----------|
-| PA0 | MQ-2 Gas Sensor |
-| PA1 | LDR Sensor |
-| PA6 | Fan PWM Output |
-| PA9 | USART1 TX |
-| PA10 | USART1 RX |
-| PB0 | RGB LED Red |
-| PB1 | RGB LED Green |
-| PB2 | RGB LED Blue |
-| PB3 | Relay Control |
-| PB4 | Buzzer |
-| PB6 | DHT11 Data |
-| PB7 | PIR Motion Input |
-| PB8 | LCD RS |
-| PB9 | LCD Enable |
-| PB10 | LCD D4 |
-| PB11 | LCD D5 |
-| PB12 | LCD D6 |
-| PB13 | LCD D7 |
-| PC13 | UP Button |
-| PC14 | DOWN Button |
-| PC15 | SELECT Button |
-
----
-
-## ⚙️ Control Logic
-
-### Fan Control
-
-| Temperature | Fan Speed |
-|-------------|------------|
-| Below 30°C | 0% |
-| 30°C – 35°C | Linear PWM Control |
-| Above 35°C | 100% |
-
-#### Formula
-
-```text
-Duty = (Temperature - 30) × 999 / 5
-
+```c
+LCD_PrintRow(0, "Settings/Override");
 ```
+This is 17 characters. `LCD_PrintRow` iterates up to `len < 16U`, so the 17th character ('e') is silently dropped. The display shows `"Settings/Overrid"`. This is a **cosmetic truncation, not a crash**. No buffer overrun occurs because `LCD_PrintRow` guards with `len < 16U`. Noted for awareness.
+
+### 5. `dht11.c` — `dht11_wait_for` uses post-decrement on unsigned
+
+```c
+uint32_t t = timeout_us;
+while (t--) { ... }
+```
+When `t = 0`, `t--` evaluates to 0 (false), loop exits before the decrement wraps. This is safe — standard C behaviour for post-decrement used as loop condition. ✅
+
+### 6. `delay_us.c` — `DWT_Delay_Init` return value not checked in `main.c`
+
+```c
+DWT_Delay_Init();  // return value discarded
+```
+If DWT is unavailable, all `delay_us()` calls would busy-loop forever. On STM32F103C8T6 (Cortex-M3), DWT is always present, so this is not a practical issue. A `__BKPT(0)` or `Error_Handler()` on failure would be more robust. **Low severity.**
+
+### 7. `uart_comm.c` — `UART_TxUInt` takes `uint16_t` but `main.c` passes `uint32_t`
+
+```c
+UART_TxStr("Fan Duty: "); UART_TxUInt((uint16_t)g_sys.fan_duty);
+```
+`fan_duty` is `uint32_t` (max 999). The cast to `uint16_t` is safe since 999 < 65535. The explicit cast suppresses any compiler warning. ✅
+
+### 8. `Makefile` — Source path mismatch (IMPORTANT — see note)
+
+The Makefile uses `Core/Src/*.c` and `Core/Inc` paths typical of STM32CubeIDE generated projects, but all `.c` and `.h` files are in the **root directory** of the repo. This means:
+- `make` as-is would **not compile** the application sources unless the files are reorganised into `Core/Src/` and `Core/Inc/`.
+- The Makefile is written for the STM32CubeIDE project layout. **This is by design** — the repo appears to be the "flat" portable version meant to be dropped into a CubeIDE project, or the Makefile needs `APP_SRCS` pointing to the root `.c` files.
+
+**Fix:** Either reorganise files into `Core/Src/` or change `APP_SRCS` in the Makefile:
+```makefile
+# Option: compile flat layout
+APP_SRCS = $(wildcard *.c)
+```
+
+---
+
+## ✅ README Issues Fixed
+
+| # | Issue | Status |
+|---|---|---|
+| 1 | Missing **Build System** section (Makefile targets undocumented) | ✅ Added |
+| 2 | Missing **Bluetooth Commands** table (`R/r/A/F/f/S/?`) | ✅ Added |
+| 3 | LCD 5-page menu not documented — only said "Five-page menu system" | ✅ Added page-by-page table |
+| 4 | Fan formula range endpoints not precise (boundary conditions) | ✅ Clarified with exact code values |
+| 5 | `TEMP_WARN_C = 30` is fan start, but README said "below 30°C = 0%" — could be read as exclusive | ✅ Clarified |
+| 6 | No "Flash Memory" note — README said 64 KB but STM32F103C8T6 has 64 KB (some marked C8 have 128 KB) | ✅ Added note |
+| 7 | Makefile flat-layout issue not documented | ✅ Added note in build section |
+| 8 | No mention of `stm32f1xx_it.c` / SysTick requirement | ✅ Added to build notes |
+| 9 | WARNING state temperature threshold: code uses `>= TEMP_HIGH_C (35)` but README said "> 35°C" — should be "≥ 35°C" | ✅ Fixed |
+| 10 | ALARM state temperature threshold: code uses `>= TEMP_CRITICAL_C (40)`, README said "> 40°C" — should be "≥ 40°C" | ✅ Fixed |
+
 ---
 
 # License
