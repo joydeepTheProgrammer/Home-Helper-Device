@@ -47,6 +47,8 @@ Sensors ──► STM32F103C8T6 ──► Actuators
 
 ## Circuit Diagram
 
+<img width="1024" height="1024" alt="circuit-full" src="https://github.com/user-attachments/assets/ae76bbcd-a5c4-4e23-ac50-8401c024d284" />
+
 <img width="1024" height="1024" alt="circuit-drivers" src="https://github.com/user-attachments/assets/b5a60b26-e7df-4974-abb8-6642212e31b5" />
 
 
